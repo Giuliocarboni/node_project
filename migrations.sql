@@ -1,0 +1,3 @@
+DROP DATABASE IF EXISTS api_ordini;
+CREATE DATABASE api_ordini CHARACTER SET utf8mb4;
+USE api_ordini;
