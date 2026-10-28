@@ -1,3 +1,8 @@
 DROP DATABASE IF EXISTS api_ordini;
 CREATE DATABASE api_ordini CHARACTER SET utf8mb4;
 USE api_ordini;
+CREATE TABLE products (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
