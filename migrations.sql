@@ -6,3 +6,10 @@ CREATE TABLE products (
     name VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
+CREATE TABLE users (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    PRIMARY KEY(id)
+);
