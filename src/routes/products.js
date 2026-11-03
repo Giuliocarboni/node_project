@@ -52,4 +52,35 @@ router.post("/", async (req, res) => {
   res.status(201).json({ id: result.insertId, name: cleanName });
 });
 
+router.put("/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({ error: "Invalid product id" });
+  }
+
+  const { name } = req.body ?? {};
+
+  if (
+    typeof name !== "string" ||
+    name.trim() === "" ||
+    name.trim().length > 255
+  ) {
+    return res
+      .status(400)
+      .json({ error: "Name is required and must be at most 255 characters" });
+  }
+  const cleanName = name.trim();
+
+  const [result] = await pool.execute(
+    "UPDATE products SET name = ? WHERE id = ?",
+    [cleanName, id],
+  );
+
+  if (result.affectedRows === 0) {
+    return res.status(404).json({ error: "Product not found" });
+  }
+
+  res.status(200).json({ id, name: cleanName });
+});
+
 export default router;
