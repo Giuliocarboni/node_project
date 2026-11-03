@@ -29,4 +29,27 @@ router.get("/:id", async (req, res) => {
   res.json(rows[0]);
 });
 
+router.post("/", async (req, res) => {
+  const { name } = req.body ?? {};
+
+  if (
+    typeof name !== "string" ||
+    name.trim() === "" ||
+    name.trim().length > 255
+  ) {
+    return res
+      .status(400)
+      .json({ error: "Name is required and must be at most 255 characters" });
+  }
+
+  const cleanName = name.trim();
+
+  const [result] = await pool.execute(
+    "INSERT INTO products (name) VALUES (?)",
+    [cleanName],
+  );
+
+  res.status(201).json({ id: result.insertId, name: cleanName });
+});
+
 export default router;
