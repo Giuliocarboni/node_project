@@ -1,5 +1,6 @@
 import { Router } from "express";
 import pool from "../db.js";
+import { parseId, parseRequiredString } from "../utils/validation.js";
 
 const router = Router();
 
@@ -11,9 +12,9 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  const id = Number(req.params.id);
+  const id = parseId(req.params.id);
 
-  if (!Number.isInteger(id) || id <= 0) {
+  if (id === null) {
     return res.status(400).json({ error: "Invalid product id" });
   }
 
@@ -31,18 +32,13 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const { name } = req.body ?? {};
+  const cleanName = parseRequiredString(name);
 
-  if (
-    typeof name !== "string" ||
-    name.trim() === "" ||
-    name.trim().length > 255
-  ) {
+  if (cleanName === null) {
     return res
       .status(400)
       .json({ error: "Name is required and must be at most 255 characters" });
   }
-
-  const cleanName = name.trim();
 
   const [result] = await pool.execute(
     "INSERT INTO products (name) VALUES (?)",
@@ -53,23 +49,20 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  const id = Number(req.params.id);
-  if (!Number.isInteger(id) || id <= 0) {
+  const id = parseId(req.params.id);
+
+  if (id === null) {
     return res.status(400).json({ error: "Invalid product id" });
   }
 
   const { name } = req.body ?? {};
+  const cleanName = parseRequiredString(name);
 
-  if (
-    typeof name !== "string" ||
-    name.trim() === "" ||
-    name.trim().length > 255
-  ) {
+  if (cleanName === null) {
     return res
       .status(400)
       .json({ error: "Name is required and must be at most 255 characters" });
   }
-  const cleanName = name.trim();
 
   const [result] = await pool.execute(
     "UPDATE products SET name = ? WHERE id = ?",
@@ -84,8 +77,9 @@ router.put("/:id", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  const id = Number(req.params.id);
-  if (!Number.isInteger(id) || id <= 0) {
+  const id = parseId(req.params.id);
+
+  if (id === null) {
     return res.status(400).json({ error: "Invalid product id" });
   }
 
