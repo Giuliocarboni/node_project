@@ -74,4 +74,27 @@ router.post("/", async (req, res) => {
   res.status(201).json({ id: result.insertId, ...user });
 });
 
+router.put("/:id", async (req, res) => {
+  const id = parseId(req.params.id);
+  if (id === null) {
+    return res.status(400).json({ error: "Invalid user id" });
+  }
+
+  const { user, error } = parseUserBody(req.body);
+  if (error) {
+    return res.status(400).json({ error });
+  }
+
+  const [result] = await pool.execute(
+    "UPDATE users SET first_name = ?, last_name = ?, email = ? WHERE id = ?",
+    [user.first_name, user.last_name, user.email, id],
+  );
+
+  if (result.affectedRows === 0) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  res.status(200).json({ id, ...user });
+});
+
 export default router;
