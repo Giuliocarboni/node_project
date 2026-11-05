@@ -21,3 +21,13 @@ export function parseRequiredString(value, maxLength = 255) {
   }
   return trimmed;
 }
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export function parseEmail(value) {
+  const email = parseRequiredString(value);
+  if (email === null || !EMAIL_PATTERN.test(email)) {
+    return null;
+  }
+  return email.toLowerCase();
+}
