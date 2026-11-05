@@ -1,6 +1,11 @@
+const ID_PATTERN = /^[1-9]\d*$/;
+
 export function parseId(value) {
+  if (typeof value !== "string" || !ID_PATTERN.test(value)) {
+    return null;
+  }
   const id = Number(value);
-  if (!Number.isInteger(id) || id <= 0) {
+  if (!Number.isSafeInteger(id)) {
     return null;
   }
   return id;
