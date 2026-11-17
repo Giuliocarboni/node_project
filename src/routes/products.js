@@ -45,7 +45,9 @@ router.post("/", async (req, res) => {
     [cleanName],
   );
 
-  res.status(201).json({ id: result.insertId, name: cleanName });
+  const id = result.insertId;
+
+  res.status(201).location(`/products/${id}`).json({ id, name });
 });
 
 router.put("/:id", async (req, res) => {
