@@ -71,7 +71,12 @@ router.post("/", async (req, res) => {
     [user.first_name, user.last_name, user.email],
   );
 
-  res.status(201).json({ id: result.insertId, ...user });
+  const id = result.insertId;
+
+  res
+    .status(201)
+    .location(`/users/${id}`)
+    .json({ id, ...user });
 });
 
 router.put("/:id", async (req, res) => {
