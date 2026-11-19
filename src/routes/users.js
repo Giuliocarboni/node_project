@@ -9,20 +9,22 @@ import { methodNotAllowed } from "../middlewares/errors.js";
 
 const router = Router();
 
+const NAME_MAX_LENGTH = 100;
+
 function parseUserBody(body) {
   const { first_name, last_name, email } = body ?? {};
 
-  const firstName = parseRequiredString(first_name);
+  const firstName = parseRequiredString(first_name, NAME_MAX_LENGTH);
   if (firstName === null) {
     return {
-      error: "first_name is required and must be at most 255 characters",
+      error: `first_name is required and must be at most ${NAME_MAX_LENGTH} characters`,
     };
   }
 
-  const lastName = parseRequiredString(last_name);
+  const lastName = parseRequiredString(last_name, NAME_MAX_LENGTH);
   if (lastName === null) {
     return {
-      error: "last_name is required and must be at most 255 characters",
+      error: `last_name is required and must be at most ${NAME_MAX_LENGTH} characters`,
     };
   }
 
