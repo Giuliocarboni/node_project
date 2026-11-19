@@ -42,10 +42,8 @@ export function methodNotAllowed(allowedMethods) {
 
   return (req, res) => {
     res.set("Allow", allow);
-    res
-      .status(405)
-      .json({
-        error: `Method ${req.method} not allowed on ${req.originalUrl}`,
-      });
+    res.status(405).json({
+      error: `Method ${req.method} not allowed on ${req.originalUrl}`,
+    });
   };
 }
