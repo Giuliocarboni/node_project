@@ -36,3 +36,16 @@ export function errorHandler(err, req, res, next) {
   console.error(err);
   res.status(500).json({ error: "Internal server error" });
 }
+
+export function methodNotAllowed(allowedMethods) {
+  const allow = allowedMethods.join(", ");
+
+  return (req, res) => {
+    res.set("Allow", allow);
+    res
+      .status(405)
+      .json({
+        error: `Method ${req.method} not allowed on ${req.originalUrl}`,
+      });
+  };
+}
