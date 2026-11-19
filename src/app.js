@@ -5,6 +5,7 @@ import usersRouter from "./routes/users.js";
 import { notFound, errorHandler } from "./middlewares/errors.js";
 
 const app = express();
+app.disable("x-powered-by");
 app.use(express.json());
 app.use("/products", productsRouter);
 app.use("/users", usersRouter);
