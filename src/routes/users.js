@@ -5,6 +5,7 @@ import {
   parseRequiredString,
   parseEmail,
 } from "../utils/validation.js";
+import { methodNotAllowed } from "../middlewares/errors.js";
 
 const router = Router();
 
@@ -116,5 +117,8 @@ router.delete("/:id", async (req, res) => {
 
   res.status(204).end();
 });
+
+router.all("/", methodNotAllowed(["GET", "POST"]));
+router.all("/:id", methodNotAllowed(["GET", "PUT", "DELETE"]));
 
 export default router;
