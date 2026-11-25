@@ -2,6 +2,7 @@ import express from "express";
 import pool from "./db.js";
 import productsRouter from "./routes/products.js";
 import usersRouter from "./routes/users.js";
+import ordersRouter from "./routes/orders.js";
 import { notFound, errorHandler } from "./middlewares/errors.js";
 
 const app = express();
@@ -9,6 +10,7 @@ app.disable("x-powered-by");
 app.use(express.json());
 app.use("/products", productsRouter);
 app.use("/users", usersRouter);
+app.use("/orders", ordersRouter);
 
 app.get("/health", async (req, res) => {
   try {
