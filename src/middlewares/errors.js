@@ -1,16 +1,22 @@
+const IN_USE = {
+  status: 409,
+  message: "Resource is in use and cannot be deleted",
+};
+
+const MISSING_REFERENCE = {
+  status: 400,
+  message: "Referenced resource does not exist",
+};
+
 const MYSQL_ERRORS = {
   ER_DUP_ENTRY: {
     status: 409,
     message: "A resource with the same unique value already exists",
   },
-  ER_ROW_IS_REFERENCED_2: {
-    status: 409,
-    message: "Resource is in use and cannot be deleted",
-  },
-  ER_NO_REFERENCED_ROW_2: {
-    status: 400,
-    message: "Referenced resource does not exist",
-  },
+  ER_ROW_IS_REFERENCED: IN_USE,
+  ER_ROW_IS_REFERENCED_2: IN_USE,
+  ER_NO_REFERENCED_ROW: MISSING_REFERENCE,
+  ER_NO_REFERENCED_ROW_2: MISSING_REFERENCE,
 };
 
 export function notFound(req, res) {
