@@ -1,6 +1,6 @@
 import { Router } from "express";
 import pool, { withTransaction } from "../db.js";
-import { parseIdList } from "../utils/validation.js";
+import { parseId, parseIdList } from "../utils/validation.js";
 
 const router = Router();
 
@@ -92,6 +92,20 @@ async function findOrderById(id) {
   const [order] = await attachDetails(rows);
   return order ?? null;
 }
+
+router.get("/:id", async (req, res) => {
+  const id = parseId(req.params.id);
+  if (id === null) {
+    return res.status(400).json({ error: "Invalid order id" });
+  }
+
+  const order = await findOrderById(id);
+  if (order === null) {
+    return res.status(404).json({ error: "Order not found" });
+  }
+
+  res.json(order);
+});
 
 router.post("/", async (req, res) => {
   const { order, error } = parseOrderBody(req.body);
